@@ -1,0 +1,9 @@
+include README.md LICENSE
+recursive-include markovmeme *
+include markovmeme/fonts/*ttf
+include markovmeme/data/corpus/*.txt
+include markovmeme/data/images/*.png
+recursive-exclude .git *
+prune markovmeme/__pycache__
+prune docs*
+prune img*
