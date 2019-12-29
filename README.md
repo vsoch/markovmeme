@@ -99,6 +99,15 @@ to generate the model from.
 $ markov-meme generate --custom-corpus markovmeme/data/corpus/office/michael.txt --image markovmeme/data/images/office/michael2.png
 ```
 
+Here is a loop to generate one meme per corpus (and matching image)
+
+```bash
+for corpus in hamlet dr_seuss trump_speech the_office office/stanley office/toby office/meredith office/holly office/creed office/oscar office/deangelo office/david office/dwight office/kelly office/phyllis office/jim office/nellie office/gabe office/clark office/roy office/karen office/michael office/andy office/charles office/kevin office/pam office/ryan office/erin office/robert office/darryl office/pete office/jan office/jo office/angela
+  do
+    markov-meme generate --corpus ${corpus}
+done
+```
+
 ### Skip Model
 
 If you don't want to use a model (and want real lines from some corpus) add `--no-model`
@@ -106,6 +115,7 @@ If you don't want to use a model (and want real lines from some corpus) add `--n
 ```bash
 $ markov-meme generate --no-model
 ```
+
 
 ## Interactive Python
 For the most part, text size and number of characters are limited to fit reasonable within

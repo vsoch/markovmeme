@@ -136,7 +136,12 @@ class MemeImage:
         lines = []
         current_words = []
         current_width = 0
+
+        # Calculate pixels of a space
+        space_width = font.getsize(" ")[0]
+
         for word in words:
+
             word_width = font.getsize(word)[0]
 
             # If our current list of words goes over max width
@@ -145,12 +150,12 @@ class MemeImage:
 
                 # Start a new line with the word
                 current_words = [word]
-                current_width = word_width
+                current_width = word_width + space_width
 
             # Otherwise add the word to the current width
             else:
                 current_words.append(word)
-                current_width += word_width
+                current_width += word_width + space_width
 
         # Add the last line
         lines.append(" ".join(current_words))
