@@ -1,0 +1,8 @@
+<a class="navbar-brand navbar-brand-logo" href="{{ site.url }}{{ site.baseurl }}/">
+   {{ site.title }}</a>
+<nav class="navigation navigation--light navigation--color-1 navigation--rtl">
+  <ul class="menu"><li><a href="{{ site.url }}{{ site.baseurl }}/">{{ site.title }}</a></li>
+  {% for item in site.navbar-links %}<li><a href="{{ site.url }}{{ site.baseurl }}/{{ item[1]}}">{{ item[0] }}</a></li>{% endfor %}
+<li><a href="{{ site.repo }}">GitHub</a></li>
+  </ul>
+</nav>

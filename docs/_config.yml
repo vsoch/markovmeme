@@ -1,0 +1,49 @@
+# --- General options --- #
+
+# Community Name: here you should write the repository name for your community.
+# It should be prefixed with community-<name>. This will deploy to us-rse.org/community-<name>
+baseurl: "/markovmeme"
+
+title: Markov Meme Generator
+
+# Description: Short description of your site
+description: Markov Meme Generator in Python
+author: vsoch
+repo: https://www.github.com/vsoch/markovmeme
+
+# Social Profiles
+
+# Uncomment twitter to have a feed in the right sidebar of latest tweets
+twitter:  vsoch
+github_username:  vsoch
+
+# Navigation
+navbar-links:
+  About: "https://www.github.com/vsoch/markovmeme"
+
+# Paths
+defaults:
+    -
+        scope:
+            path: "pages"
+            type: pages
+        values:
+            layout: page
+    -
+        scope:
+            path: ""
+            type: posts
+        values:
+            layout: post
+            comments: true
+
+
+# Build settings
+permalink   : /:year/:categories/:title/
+exclude: ["_site", "vendor", ".circleci"]
+
+markdown:          kramdown
+
+plugins:
+  - jekyll-feed
+  - jekyll-seo-tag

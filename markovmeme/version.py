@@ -23,6 +23,5 @@ LICENSE = "LICENSE"
 
 INSTALL_REQUIRES = (("Pillow", {"min_version": "6.0.0"}),)
 TESTS_REQUIRES = (("pytest", {"min_version": "4.6.2"}),)
-ANIMATE_REQUIRES = (("imageio", {"min_version": "2.5.0"}),)
 
-INSTALL_REQUIRES_ALL = INSTALL_REQUIRES + ANIMATE_REQUIRES
+INSTALL_REQUIRES_ALL = INSTALL_REQUIRES
