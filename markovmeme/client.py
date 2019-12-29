@@ -14,14 +14,13 @@ from markovmeme.utils import list_corpus
 from markovmeme.main import MemeImage
 from markovmeme.text import generate_text
 import argparse
+import random
 import sys
 import os
 
 
 def get_parser():
-    parser = argparse.ArgumentParser(
-        description="Markov Meme Generator"
-    )
+    parser = argparse.ArgumentParser(description="Markov Meme Generator")
 
     description = "actions for Markov Meme Generator"
     subparsers = parser.add_subparsers(
@@ -64,7 +63,7 @@ def get_parser():
         choices=list_corpus(),
         help="the corpus to use to generate the meme, matches to images.",
         type=str,
-        default="office/michael",
+        default=None,
     )
 
     generate.add_argument(
@@ -76,7 +75,7 @@ def get_parser():
     )
 
     generate.add_argument(
-        "--custom-image",
+        "--image",
         dest="custom_image",
         help="A custom image file, full path",
         type=str,
@@ -113,19 +112,18 @@ def main():
 
         # Determine if we have a corpus or custom corpus
         corpus = args.corpus
+        if corpus is None:
+            corpus = random.choice(list_corpus())
+
         if args.custom_corpus:
             if os.path.exists(args.custom_corpus):
                 corpus = args.custom_corpus
-        
+
         text = generate_text(corpus=corpus, use_model=not args.no_model, size=10)
         meme = MemeImage(image=args.custom_image, corpus=corpus)
 
         # Add text generated, will go to top and bottom
-        meme.write_text(
-            text,
-            fontsize=args.fontsize,
-            font=font,
-        )
+        meme.write_text(text, fontsize=args.fontsize, font=font)
         meme.save_image(args.outfile)
 
     else:

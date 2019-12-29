@@ -32,14 +32,14 @@ def list_corpus(remove_ext=True):
        corpus. We remove the extensions since we are providing as options
        on the command line.
     """
-    data = os.path.join(here, 'data', "corpus")
+    data = os.path.join(here, "data", "corpus")
     return list_folder(data, remove_ext=remove_ext, ext=".txt")
 
 
 def list_images(remove_ext=True):
     """Based on the .png files in the data/images folder, return the paths.
     """
-    data = os.path.join(here, 'data', "images")
+    data = os.path.join(here, "data", "images")
     return list_folder(data, remove_ext=remove_ext, ext=".png")
 
 
@@ -51,8 +51,8 @@ def list_folder(folder, remove_ext=True, ext=".txt"):
         for filename in files:
             if filename.endswith(ext):
                 filename = os.path.join(root, filename)
-                filename = filename.replace(folder, "").strip('/')
+                filename = filename.replace(folder, "").strip("/")
                 if remove_ext:
-                    filename = filename.replace(ext, '')
+                    filename = filename.replace(ext, "")
                 folders.append(filename)
     return folders

@@ -13,11 +13,13 @@ from .namer import RobotNamer
 from .utils import list_corpus, list_images, get_font
 from PIL import Image, ImageDraw, ImageFont
 
+import math
 import random
 import os
 import sys
 
 here = os.path.dirname(os.path.abspath(__file__))
+
 
 class MemeImage:
     """A Meme Image includes markov (or randomly selected) text from a corpus, and
@@ -26,18 +28,26 @@ class MemeImage:
        a custom image must also be provided. If an image doesn't exist for a 
        given corpus, the user is required to specify it.
     """
-    def __init__(
-        self,
-        image=None,
-        corpus=None,
-        quiet=False,
-    ):
 
+    def __init__(self, image=None, corpus=None, quiet=False):
+
+        self.corpus = self.get_corpus(corpus)
         self.quiet = quiet
-        self.corpus = corpus
-        self.imagefile = self.get_image(image, corpus)
+        self.imagefile = self.get_image(image, self.corpus)
         self.image = Image.open(self.imagefile).convert("RGBA")
         self.draw = ImageDraw.Draw(self.image)
+
+    def get_corpus(self, corpus):
+        """Given an input corpus, validate that it's available. If it's not
+           a full path to a file, or if it doesn't exist, select one at random.
+        """
+        if os.path.exists(corpus):
+            return corpus
+
+        options = list_corpus()
+        if corpus in options:
+            return corpus
+        return random.choice(corpus)
 
     def get_image(self, image, corpus):
         """If the image is provided, the full path must exist. Otherwise,
@@ -55,8 +65,7 @@ class MemeImage:
             sys.exit("No images exist for corpus %s. Please specify --image." % corpus)
 
         choice = random.choice(options)
-        return os.path.join(here, 'data', 'images', "%s.png" % choice)
-
+        return os.path.join(here, "data", "images", "%s.png" % choice)
 
     def __str__(self):
         return "[mememl][%s]" % (self.corpus)
@@ -71,6 +80,97 @@ class MemeImage:
             print(message)
 
     def write_text(
+        self,
+        text,
+        fontsize=32,
+        rgb=(255, 255, 255),
+        ycoord=10,
+        font="Anton-Regular.ttf",
+    ):
+        """Given a text string, font size, and output coordinates, write text
+           onto the image. The default font provided with the package 
+        """
+        if text not in [None, ""]:
+
+            # Break image into width and height
+            width, height = self.image.size
+            fontfile = get_font(font)
+            font = ImageFont.truetype(fontfile, fontsize)
+
+            # How much space do we need for all of text?
+            expect_width, expect_height = self.draw.textsize(text, font)
+
+            # Do we need multiple lines?
+            lineCount = 1
+            if expect_width > width:
+                lineCount = int(round((expect_width / width) + 1))
+
+            # Split text into <lineCount> lines
+            lines = self.text2lines(text, lineCount, font)
+
+            # Draw each line on the image
+            for i in range(0, lineCount):
+                w, h = self.draw.textsize(lines[i], font)
+
+                # We want the text to be centered
+                xcoord = width / 2 - w / 2
+                ycoord = i * h
+
+                # Black outline
+                self.draw.text((xcoord - 2, ycoord - 2), lines[i], (0, 0, 0), font=font)
+                self.draw.text((xcoord + 2, ycoord - 2), lines[i], (0, 0, 0), font=font)
+                self.draw.text((xcoord + 2, ycoord + 2), lines[i], (0, 0, 0), font=font)
+                self.draw.text((xcoord - 2, ycoord + 2), lines[i], (0, 0, 0), font=font)
+
+                # Main text
+                self.draw.text((xcoord, ycoord), lines[i], font=font, fill=rgb)
+
+    def text2lines(self, text, lineCount, font):
+        """given a linecount, split text into lines. We minimally return one 
+           line, the given text as a single entry in a list.
+           I was originally using textwrap, but this is much more direct
+           https://blog.lipsumarium.com/caption-memes-in-python/
+        """
+        if lineCount == 1:
+            return [text]
+
+        lines = []
+        lastCut = 0
+        is_last = False
+
+        for i in range(0, lineCount):
+
+            cut = lastCut
+            if lastCut == 0:
+                cut = (len(text) / lineCount) * i
+            cut = math.floor(cut)
+
+            if i < lineCount - 1:
+                nextCut = int((len(text) / lineCount) * (i + 1))
+            else:
+                nextCut = len(text)
+                is_last = True
+
+            # make sure we don't cut words in half
+            if nextCut != len(text) and text[nextCut] == " ":
+                while text[nextCut] != " ":
+                    nextCut += 1
+
+            line = text[cut:nextCut].strip()
+
+            # is line still fitting (we overshot)
+            w, h = self.draw.textsize(line, font)
+            if not is_last and w > self.image.width:
+                nextCut -= 1
+                while text[nextCut] != " ":
+                    nextCut -= 1
+
+            lastCut = nextCut
+            lines.append(text[cut:nextCut].strip())
+
+        return lines
+
+    def Xwrite_text(
         self,
         text,
         fontsize=32,
@@ -108,15 +208,22 @@ class MemeImage:
                     break
 
                 # Black outline
-                self.draw.text((xstart-2, total_height-2), text,(0,0,0), font=font)
-                self.draw.text((xstart+2, total_height-2), text,(0,0,0), font=font)
-                self.draw.text((xstart+2, total_height+2), text,(0,0,0), font=font)
-                self.draw.text((xstart-2, total_height+2), text,(0,0,0), font=font)
+                self.draw.text(
+                    (xstart - 2, total_height - 2), text, (0, 0, 0), font=font
+                )
+                self.draw.text(
+                    (xstart + 2, total_height - 2), text, (0, 0, 0), font=font
+                )
+                self.draw.text(
+                    (xstart + 2, total_height + 2), text, (0, 0, 0), font=font
+                )
+                self.draw.text(
+                    (xstart - 2, total_height + 2), text, (0, 0, 0), font=font
+                )
 
                 # Main text
                 self.draw.text((xstart, total_height), line, font=font, fill=rgb)
                 total_height += h
-
 
     def save_image(self, outfile=None):
         """Save the image to an output file, if provided. Optionally add some

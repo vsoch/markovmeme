@@ -20,7 +20,8 @@ here = os.path.dirname(os.path.abspath(__file__))
 
 ## Generation Functions
 
-def generate_text(corpus, use_model=True, size=100):
+
+def generate_text(corpus, use_model=True, size=10):
     """Based on a corpus file prefix in "corpus" generate either word-based
        ngram (wordgram) model, or just randomly select a sentence from
        the corpus.
@@ -121,7 +122,7 @@ def get_corpus(prefix):
        we assume a .txt extension, and return the full path to the file.
     """
     selection = list_corpus(remove_ext=False)
-    selected = "%s.txt" %(prefix)
+    selected = "%s.txt" % (prefix)
 
     # Return filename if exists
     corpus_folder = os.path.join(here, "data", "corpus")
