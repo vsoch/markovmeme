@@ -39,4 +39,4 @@ jobs:
       - name: Test random generator
         run: |
           export PATH="/usr/share/miniconda/bin:$PATH"
-          mmeme generate
+          markov-meme generate
