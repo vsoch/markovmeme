@@ -6,6 +6,11 @@
 Wouldn't it be great to generate themed memes with Markov Models? Or just randomly
 generated text? I think so too.
 
+![https://vsoch.github.io/markovmeme/assets/gallery/peachy-sundae-4573.png](https://vsoch.github.io/markovmeme/assets/gallery/peachy-sundae-4573.png)
+
+See the pathetic gallery [here](https://vsoch.github.io/markovmeme/)  or continue reading
+to generate your own terrible memes.
+
 ## Usage
 
 ### Install
@@ -78,11 +83,16 @@ To generate a meme from a random corpus, you can just run:
 $ markov-meme generate
 ```
 
+The library comes with images that are matched to each corpus (e.g., text generated with
+lines from Michael's the Office will display with an image of Michael Scott).
 If the randomly selected corpus doesn't have matching images, you'll see
 
 ```bash
 No images exist for corpus office/clark. Please specify --image.
 ```
+
+Most of the corpus should now have images so you are unlikely to see this.
+
 
 ### Corpus and Image Selection
 
