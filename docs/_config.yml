@@ -17,10 +17,6 @@ repo: https://www.github.com/vsoch/markovmeme
 twitter:  vsoch
 github_username:  vsoch
 
-# Navigation
-navbar-links:
-  About: "https://www.github.com/vsoch/markovmeme"
-
 # Paths
 defaults:
     -
